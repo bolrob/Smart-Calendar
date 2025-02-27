@@ -19,12 +19,20 @@ repositories {
 }
 
 dependencies {
+	implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.6"))
+	implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2023.0.4"))
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	implementation("org.postgresql:postgresql:42.7.5")
+	implementation("org.hibernate:hibernate-core:6.6.7.Final")
+
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
 kotlin {

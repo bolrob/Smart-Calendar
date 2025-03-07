@@ -6,7 +6,7 @@ create table public.users
     username varchar(255) not null unique,
     phone varchar(12) unique,
     email varchar(255) unique,
-    tg varchar(255) unique,
+    tg varchar(255) not null unique,
 )
 
 --таблица с описанием мероприятий (название, краткое описание мероприятия, его адрес проведения, координаты,
@@ -16,8 +16,8 @@ create table public.events(
     title varchar(255) not null,
     description varchar,
     address varchar,
-    latitude decimal(10, 8) not null,
-    longitude decimal(10, 8) not null,
+    latitude decimal(10, 8),
+    longitude decimal(10, 8),
     start_time timestamp not null,
     end_time timestamp not null,
     organizer_id bigint not null references public.users(id),
@@ -44,7 +44,7 @@ create table public.reviews
     id bigserial primary key,
     user_id bigint not null references public.users(id),
     event_id bigint not null references public.events(id),
-    rating evaluation decimal(10, 2)
+    rating_evaluation decimal(10, 2)
 )
 
 --таблица с данными о напоминаниях (на какое событие, какому пользователю, время отправки напоминания и статус отправки (было отправлено или нет)

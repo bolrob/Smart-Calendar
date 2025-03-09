@@ -1,11 +1,11 @@
 package demo.calendar.repository
 
-import demo.calendar.dto.User
+import demo.calendar.entity.UserEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface UserRepository: JpaRepository<User, Long> {
-    fun findByPhone(phone: String): User?
+interface UserRepository: JpaRepository<UserEntity, Long> {
+    fun findByPhone(phone: String): UserEntity?
 
-    fun findByTg(tg: String): User?
+    fun findByTg(tg: String): UserEntity?
 }

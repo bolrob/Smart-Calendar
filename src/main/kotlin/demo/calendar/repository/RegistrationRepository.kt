@@ -1,8 +1,8 @@
 package demo.calendar.repository
 
-import demo.calendar.dto.Registration
+import demo.calendar.entity.RegistrationEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface RegistrationRepository: JpaRepository<Registration, Long> {
+interface RegistrationRepository: JpaRepository<RegistrationEntity, Long> {
 }

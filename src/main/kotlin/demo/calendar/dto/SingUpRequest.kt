@@ -1,6 +1,9 @@
 package demo.calendar.dto
 
 data class SingUpRequest(
-    val todo: String
+    val userName: String,
+    val phone: String?,
+    val email: String?,
+    val tg: String
 ) {
 }

@@ -1,5 +1,8 @@
 package demo.calendar.service
 
-class CalendarService(
-) {
+import org.springframework.stereotype.Component
+
+@Component
+class CalendarService {
+
 }

@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-calendars-table
+      changes:
+        - createTable:
+            tableName: calendars
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: calendar_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createIndex:
+            tableName: calendars
+            indexName: idx_calendars_name
+            columns:
+              - column:
+                  name: calendar_name
+
+      rollback:
+        - dropTable:
+            tableName: calendars

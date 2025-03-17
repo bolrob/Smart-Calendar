@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-events-table
+      changes:
+        - createTable:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar
+              - column:
+                  name: address
+                  type: varchar
+              - column:
+                  name: latitude
+                  type: decimal(10,8)
+              - column:
+                  name: longitude
+                  type: decimal(10,8)
+              - column:
+                  name: start_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  defaultValue: 'active'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: average_rating
+                  type: decimal(3,2)
+                  defaultValue: 0.00
+              - addForeignKeyConstraint:
+                  constraintName: fk_events_users
+                  baseTableName: events
+                  baseColumnNames: organizer_id
+                  referencedTableName: users
+                  referencedColumnNames: id
+                  onDelete: CASCADE
+                  onUpdate: CASCADE
+        - createIndex:
+            tableName: events
+            indexName: idx_events_title
+            columns:
+              - column:
+                  name: title
+
+      rollback:
+        - dropTable:
+            tableName: events

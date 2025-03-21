@@ -2,8 +2,11 @@ package demo.calendar.entity
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
+//idx_event_title реализует быстрый поиск по названию событий (на данный момент именно этот критерий мы считаем самым важным для пользователя),
+//по описанию и адресу точно не имеет смысла организовывать поиск, по времени тоже, так как людям интересно скорее само событие, то есть что на нем происходит
+//и потом по интересующему названию события, он выбирает уже удобно ли ему место проведения и время (тут мы подразумеваем что в названии события отражено то, что будет на нем происходить)
 @Entity
-@Table(name = "events")
+@Table(name = "events", indexes=[Index(name = "idx_events_title", columnList = "title")])
 data class EventEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,65 @@
+workspace {
+    model {
+        user = person "Пользователь." "Человек, желающий создавать, делиться и смотреть чужие календари, получая уведомления из них."
+
+        tg = softwareSystem "Телеграм." "Интерфейс приложения" "Tg"
+
+        mail = softwareSystem "Внешний сервис email."
+
+        api = softwareSystem "Внешний api для работы с календарем. (WIP)" "" "Api"
+
+        bot = softwareSystem "Умный Календарь." "Выдает пользователю информацию о доступных календарях и событиях в них" "Service"
+        bd = softwareSystem "База Данных" "cool" "Database"
+
+        user -> tg "Любой запрос пользователя"
+        tg -> user "Ответ пользователю"
+        tg -> bot "Запрос на сервер"
+        bot -> bd "Запрос на получение данных из бд"
+        bot -> mail "Запрос на отправку уведомлений"
+        bot -> api "Запрос на внешний api календарей"
+        bd -> bot "Возврат данных из бд"
+        mail -> user "Напоминания пользователю о событиях по почте"
+        tg -> user "Напоминания пользователю о событиях через тг"
+
+
+    }
+
+    views {
+        systemContext bot {
+            include *
+            include user
+            autolayout
+        }
+        styles {
+            element "Element" {
+                color white
+            }
+            element "Service" {
+                shape hexagon
+                background #FF0000
+            }
+            element "Api" {
+                background #F0E68C
+                stroke #BDB76B
+                color #000000
+            }
+            element "Tg" {
+                shape WebBrowser
+                background #00BFFF
+                stroke #1E90FF
+            }
+            element "Person" {
+                background #4B0082
+                shape person
+            }
+            element "Software System" {
+                background #8A2BE2
+            }
+            element "Database" {
+                shape cylinder
+                background #008000
+                stroke #006400
+            }
+        }
+    }
+}

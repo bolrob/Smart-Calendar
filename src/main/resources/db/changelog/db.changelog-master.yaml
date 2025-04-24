@@ -1,7 +1,7 @@
-databaseChangeLog:
+databaseChangelog:
   - include:
-      file: changes/users-changeset.yaml
-  - include:
-      file: changes/calendars-changeset.yaml
-  - include:
-      file: changes/events-changeset.yaml
+      file: db/changelog/changes/users-changeset.yaml
+#  - include:
+#      file: db/changelog/changes/calendars-changeset.yaml
+#  - include:
+#      file: db/changelog/changes/events-changeset.yaml

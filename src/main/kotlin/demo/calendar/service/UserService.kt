@@ -26,7 +26,6 @@ class UserService(
             token_value = UUID.randomUUID().toString(),
             user = user
         )
-
     @Transactional
     fun registerUser(request: SingUpRequest): UserResponse {
         val user = userRepository.findByTg(request.tg)
@@ -48,6 +47,7 @@ class UserService(
         val token = createToken(user)
         return token.token_value
     }
+    @Transactional
     fun manageUser(token: String, request: ManageRequest): UserResponse {
         val user = tokenRepository.findByValue(token)?.user
         if (user == null) throw NotValidTokenException("No user exists with such token")

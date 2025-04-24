@@ -1,6 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: create-events-table
+      author: vasya
       changes:
         - createTable:
             tableName: events
@@ -12,16 +13,21 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: organizer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
                   name: title
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: description
-                  type: varchar
+                  type: varchar(1000)
               - column:
                   name: address
-                  type: varchar
+                  type: varchar(255)
               - column:
                   name: latitude
                   type: decimal(10,8)
@@ -48,20 +54,20 @@ databaseChangeLog:
                   name: average_rating
                   type: decimal(3,2)
                   defaultValue: 0.00
-              - addForeignKeyConstraint:
-                  constraintName: fk_events_users
-                  baseTableName: events
-                  baseColumnNames: organizer_id
-                  referencedTableName: users
-                  referencedColumnNames: id
-                  onDelete: CASCADE
-                  onUpdate: CASCADE
+
+        - addForeignKeyConstraint:
+            constraintName: fk_events_users
+            baseTableName: events
+            baseColumnNames: organizer_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
         - createIndex:
             tableName: events
             indexName: idx_events_title
-            columns:
-              - column:
-                  name: title
+            columns: title
 
       rollback:
         - dropTable:

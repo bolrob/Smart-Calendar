@@ -35,21 +35,9 @@ databaseChangeLog:
                     unique: true
               - column:
                   name: password
-                  type: varchar
-                  constrains:
+                  type: varchar(255)
+                  constraints:
                     nullable: false
-        - createIndex:
-            tableName: users
-            indexName: idx_users_phone
-            columns:
-              - column:
-                  name: phone
-        - createIndex:
-            tableName: users
-            indexName: idx_users_tg
-            columns:
-              - column:
-                  name: tg
 
       rollback:
         - dropTable:

@@ -1,6 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: create-calendars-table
+      author: vasya
       changes:
         - createTable:
             tableName: calendars
@@ -20,10 +21,7 @@ databaseChangeLog:
         - createIndex:
             tableName: calendars
             indexName: idx_calendars_name
-            columns:
-              - column:
-                  name: calendar_name
-
+            columns: calendar_name
       rollback:
         - dropTable:
             tableName: calendars

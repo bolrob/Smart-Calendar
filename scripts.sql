@@ -21,7 +21,7 @@ create table public.events(
     longitude decimal(10, 8),
     start_time timestamp not null,
     end_time timestamp not null,
-    --organizer_id bigint not null references public.users(id),
+    organizer_id bigint not null references public.users(id),
     status varchar not null default('active'),
     average_rating decimal(3, 2) default(0.00)
 )

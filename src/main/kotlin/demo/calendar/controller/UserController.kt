@@ -20,6 +20,6 @@ class UserController(
     @PutMapping("/manage")
     fun manageUser(@RequestParam("token") token: String, @RequestBody request: ManageRequest) = userService.manageUser(token, request)
 
-//    @PutMapping("/logout")
-//    fun logOut(@RequestParam("token") token: String) = userService.logout(token)
+    @PutMapping("/logout")
+    fun logOut(@RequestParam("token") token: String) = userService.logout(token)
 }

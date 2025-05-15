@@ -21,12 +21,6 @@ data class EventEntity(
     @Column
     val address: String?,
 
-    @Column
-    val latitude: Double?,
-
-    @Column
-    val longitude: Double?,
-
     @Column(nullable=false)
     val startTime: LocalDateTime,
 
@@ -42,8 +36,21 @@ data class EventEntity(
     val calendar: CalendarEntity,
 
     @Column(nullable=false)
-    val status: String="active",
+    val status: String="ACTIVE",
 
     @Column
     val averageRating: Double=0.0
-)
+) {
+    fun changeRating(mean: Double) = EventEntity(
+        id = id,
+        title = title,
+        description = description,
+        address = address,
+        startTime = startTime,
+        endTime = endTime,
+        user = user,
+        calendar = calendar,
+        status = status,
+        averageRating = mean
+    )
+}

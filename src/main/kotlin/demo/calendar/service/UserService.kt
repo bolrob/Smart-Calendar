@@ -31,11 +31,9 @@ class UserService(
 
     fun tokenIsValid(token: TokenEntity?) {
         if (token == null){
-            logger.warn("Ошибка идентификации пользователя по токену, токен не валиден")
             throw NotValidTokenException("No user exists with such token")
         }
         if (token.revoked){
-            logger.warn("Ошибка идентификации пользователя по токену, срок действия токена истек")
             throw NotValidTokenException("User's token has been already revoked")
         }
     }
@@ -45,7 +43,6 @@ class UserService(
         logger.debug("Начало регистрации пользователя: {}", request.tg)
         val user = userRepository.findByTg(request.tg)
         if (user != null){
-            logger.warn("Регистрация прервана пользователь с таким tg {} уже существует", request.tg)
             throw UserAlreadyRegisteredException("User with this tg is already registered")
         }
         userRepository.save(
@@ -71,19 +68,15 @@ class UserService(
         logger.debug("Начало авторизации пользователя: {}", request.tg)
         val user = userRepository.findByTg(request.tg)
         if (user == null) {
-            logger.warn("Авторизация невозможна, пользователь с таким tg: {} не найден", request.tg)
             throw UserNotFoundException("User with this tg not found")
         }
         if (!user.active) {
-            logger.warn("Авторизация невозможна, пользователь с таким tg: {} деактивирован", request.tg)
             throw UserIsDeactivatedException("User with this tg is deactivated")
         }
         if (user.username != request.userName){
-            logger.warn("Авторизация невозможна, пользователь с таким tg: {} имеет другое имя пользователя", request.tg)
             throw WrongUserException("User with such tg has different username")
         }
         if (user.password != request.password){
-            logger.warn("Авторизация не удалась, неверный пароль для пользователя с таким tg: {}", request.tg)
             throw WrongPasswordException("User with such tg has different password")
         }
         val token = createToken(user)
@@ -98,7 +91,6 @@ class UserService(
         val user = tEntity!!.user
         logger.debug("Начало обновления пользователя с тг: {}", user.tg)
         if (request.oldPassword != user.password) {
-            logger.warn("Неверный пароль")
             throw WrongPasswordException("User with such token has different password")
         }
         userRepository.save(
@@ -139,7 +131,6 @@ class UserService(
         logger.debug("Начало удаления пользователя с тг {}", tEntity!!.user.tg)
         val user = tEntity.user
         if (user.password != password) {
-            logger.warn("Неверный пароль для пользователя с тг {}", user.tg)
             throw WrongPasswordException("User with such token has different password")
         }
         tokenRepository.save(TokenEntity(

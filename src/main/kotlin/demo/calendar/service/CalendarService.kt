@@ -119,7 +119,7 @@ class CalendarService(
             throw LimitedAccessRightsException("You do not have access rights to manage this calendars users, you can only view it.")
         }
         val newUser = userRepository.findByTg(request.userTg)
-        if(newUser == null) {
+        if(newUser == null || !newUser.active) {
             logger.warn("Ошибка обновления прав доступа для пользователя с тг {}", request.userTg)
             throw UserNotFoundException("User with this tg not found")
         }
@@ -181,7 +181,7 @@ class CalendarService(
             logger.warn("Ошибка удаления календаря с тегом {}, права доступа пользователя с тг {} недостаточны для обновления календаря", request.teg, user.tg)
             throw LimitedAccessRightsException("You do not have access rights to manage this calendar, you can only view it.")
         }
-        if (accessType == "VIEWER" || accessType == "ORGANIZER" || accessType == "MODERATOR"){
+        if (accessType != "ADMINISTRATOR"){
             logger.warn("Ошибка обновления календаря с тегом {}, права доступа пользователя с тг {} недостаточны для обновления календаря", request.teg, user.tg)
             throw LimitedAccessRightsException("You do not have access rights to delete this calendar.")
         }

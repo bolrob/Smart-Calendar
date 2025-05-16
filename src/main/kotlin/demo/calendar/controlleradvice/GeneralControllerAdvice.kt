@@ -72,4 +72,10 @@ class GeneralControllerAdvice {
         logger.warn("User with this tg is deactivated", exception)
         return ResponseEntity.status(400).body(ErrorResponse(exception.message ?: "DEACTIVATED USER"))
     }
+
+    @ExceptionHandler(BadRequestException::class)
+    fun badRequestException(exception: BadRequestException) : ResponseEntity<ErrorResponse>{
+        logger.warn("The bad request to get calendars that this user can interact with")
+        return ResponseEntity.status(400).body(ErrorResponse(exception.message ?: "BAD REQUEST TO GET CALENDARS"))
+    }
 }

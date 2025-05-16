@@ -1,68 +1,67 @@
 @startuml
-actor "Организатор" as Org
-actor "Пользователь" as User
-participant "Клиент" as Client
-participant "API" as API
-database "База данных" as DB
-participant "Уведомления" as Notif
-participant "Календарь" as Cal
+actor Client
 
-' Организатор обновляет событие:
-Org -> Client: Запрос: обновить событие
-Client -> API: Передать данные обновления
-API -> DB: Обновить запись события
-DB --> API: Подтверждение
-API --> Client: Обновлено
-Org <-- Client: Отображено обновление
+participant CalendarController as CC
+participant CalendarService    as CS
 
-' Организатор отменяет событие:
-Org -> Client: Запрос: отменить событие
-Client -> API: Передать команду отмены
-API -> DB: Изменить статус на "отменено"
-DB --> API: Подтверждение
-API -> Notif: Расослать уведомления
-API --> Client: Отменено
-Org <-- Client: Отображено отменение
+participant UserController     as UC
+participant UserService        as US
 
-' Организатор просматривает участников:
-Org -> Client: Запрос: список участников
-Client -> API: Получить регистрации
-API -> DB: Читать записи регистраций
-DB --> API: Список участников
-API --> Client: Передать список
-Org <-- Client: Отобразить список
+== Calendar flows ==
+Client -> CC: POST /api/v1/calendar/createCalendar\n(token, CreateCalendarRequest)
+CC     -> CS: createCalendar(token, request)
+CS     --> CC: CalendarResponse
+CC     --> Client: 200 OK\nCalendarResponse
 
-' Организатор интегрирует событие с календарём:
-Org -> Client: Запрос: интегрировать с календарём
-Client -> API: Передать данные для синхронизации
-API -> Cal: Синхронизировать событие
-Cal --> API: Подтверждение
-API --> Client: Интегрировано
-Org <-- Client: Отображено интегрирование
+Client -> CC: PUT /api/v1/calendar/manageUsers\n(token, ManageUsersRequest)
+CC     -> CS: manageUser(token, request)
+CS     --> CC: CalendarResponse
+CC     --> Client: 200 OK\nCalendarResponse
 
-' Пользователь просматривает события:
-User -> Client: Запрос: список событий
-Client -> API: Получить список событий
-API -> DB: Читать события
-DB --> API: Список событий
-API --> Client: Передать список
-User <-- Client: Отобразить список
+Client -> CC: PUT /api/v1/calendar/manageCalendar\n(token, ManageCalendarRequest)
+CC     -> CS: manageCalendar(token, request)
+CS     --> CC: CalendarResponse
+CC     --> Client: 200 OK\nCalendarResponse
 
-' Пользователь регистрируется:
-User -> Client: Запрос: регистрация на событие
-Client -> API: Создать запись регистрации
-API -> DB: Сохранить регистрацию
-DB --> API: Подтверждение
-API -> Notif: Запланировать напоминание
-API --> Client: Зарегистрирован
-User <-- Client: Отобразить статус регистрации
+Client -> CC: POST /api/v1/calendar/createEvent\n(token, CreateEventRequest)
+CC     -> CS: createEvent(token, request)
+CS     --> CC: EventResponse
+CC     --> Client: 200 OK\nEventResponse
 
-' Пользователь оставляет оценку:
-User -> Client: Запрос: оставить оценку
-Client -> API: Передать оценку
-API -> DB: Сохранить оценку
-DB --> API: Подтверждение
-API --> Client: Оценено
-User <-- Client: Отобразить оценку
+Client -> CC: PUT /api/v1/calendar/manageEvent\n(token, ManageEventRequest)
+CC     -> CS: manageEvent(token, request)
+CS     --> CC: EventResponse
+CC     --> Client: 200 OK\nEventResponse
+
+Client -> CC: POST /api/v1/calendar/reactEvent\n(token, ReactEventRequest)
+CC     -> CS: reactEvent(token, request)
+CS     --> CC: ReactResponse
+CC     --> Client: 200 OK\nReactResponse
+
+== User flows ==
+Client -> UC: POST /api/v1/user/register\n(SingUpRequest)
+UC     -> US: registerUser(request)
+US     --> UC: AuthResponse
+UC     --> Client: 200 OK\nAuthResponse
+
+Client -> UC: POST /api/v1/user/authorize\n(AuthorizeRequest)
+UC     -> US: authorizeUser(request)
+US     --> UC: AuthResponse
+UC     --> Client: 200 OK\nAuthResponse
+
+Client -> UC: PUT /api/v1/user/manage\n(token, ManageRequest)
+UC     -> US: manageUser(token, request)
+US     --> UC: ManageResponse
+UC     --> Client: 200 OK\nManageResponse
+
+Client -> UC: PUT /api/v1/user/logout\n(token)
+UC     -> US: logout(token)
+US     --> UC: LogoutResponse
+UC     --> Client: 200 OK\nLogoutResponse
+
+Client -> UC: PUT /api/v1/user/delete\n(token, password)
+UC     -> US: deleteUser(token, password)
+US     --> UC: DeleteResponse
+UC     --> Client: 200 OK\nDeleteResponse
 
 @enduml

@@ -162,7 +162,8 @@ class CalendarService(
 
             throw LimitedAccessRightsException("You do not have access rights to manage this calendar, you can only view it.")
         }
-        if (accessType == "VIEWER" || accessType == "ORGANIZER" || accessType == "MODERATOR"){
+        if (accessType != "ADMINISTRATOR"){
+            logger.warn("Ошибка обновления календаря с тегом {}, права доступа пользователя с тг {} недостаточны для обновления календаря", request.teg, user.tg)
             throw LimitedAccessRightsException("You do not have access rights to delete this calendar.")
         }
         val newCalendar = CalendarEntity(

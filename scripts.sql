@@ -35,12 +35,12 @@ create table public.registrations
 )
 
 --таблица отзывов(какой пользователь оставил, какому мероприятию, какую оценку поставил)
-create table public.reviews
+create table public.reactions
 (
     id bigserial primary key,
     user_id bigint not null references public.users(id),
     event_id bigint not null references public.events(id),
-    rating_evaluation decimal(10, 2)
+    reaction decimal(10, 2)
 )
 
 --таблица с данными о напоминаниях (на какое событие, какому пользователю, время отправки напоминания и статус отправки (было отправлено или нет)

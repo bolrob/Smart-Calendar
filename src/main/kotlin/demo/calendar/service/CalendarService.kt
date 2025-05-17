@@ -110,6 +110,7 @@ class CalendarService(
         }
         val newUser = userRepository.findByTg(request.userTg)
         if(newUser == null || !newUser.active) {
+            logger.warn("Ошибка обновления прав доступа для пользователя с тг {}", request.userTg)
             throw UserNotFoundException("User with this tg not found")
         }
         val oldAccessType = userToCalendarRepository.findByUserAndCalendar(newUser, calendar)

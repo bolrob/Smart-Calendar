@@ -109,7 +109,7 @@ class CalendarService(
             throw LimitedAccessRightsException("You do not have access rights to manage this calendars users, you can only view it.")
         }
         val newUser = userRepository.findByTg(request.userTg)
-        if(newUser == null) {
+        if(newUser == null || !newUser.active) {
             throw UserNotFoundException("User with this tg not found")
         }
         val oldAccessType = userToCalendarRepository.findByUserAndCalendar(newUser, calendar)

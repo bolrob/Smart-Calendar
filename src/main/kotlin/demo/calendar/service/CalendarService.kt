@@ -178,7 +178,7 @@ class CalendarService(
         logger.info("Удаление календаря с тегом {} пользователем с тг {} прошло успешно", request.teg, user.tg)
     }
 
-    fun getCalendars(token: String, page: Int, size: Int, sortBy: String?, type: String): List<CalendarResponse> {
+    fun getCalendars(token: String, page: Int, size: Int, sortBy: String?, type: ManageUsersRequest.AccessType): List<CalendarResponse> {
         val tEntity = tokenRepository.findByToken(token)
         userService.tokenIsValid(tEntity)
         val user = tEntity!!.user
@@ -186,19 +186,16 @@ class CalendarService(
         val sort = Sort.by(sortBy ?: "id")
         val pageable = PageRequest.of(page, size, sort)
         when (type) {
-            "PUBLIC" -> {
+            ManageUsersRequest.AccessType.PUBLIC -> {
                 return calendarRepository.findByPublic(true, pageable).content.map { it.toCalendar() }
             }
-            "ALLOWED" -> {
+            ManageUsersRequest.AccessType.ALLOWED -> {
                 val tmp = userToCalendarRepository.findByUser(user, pageable).content.filter { it.access_type != "DELETED" }
                 return tmp.map {it.calendar.toCalendar()}
             }
-            "OWN" -> {
+            ManageUsersRequest.AccessType.OWN -> {
                 val tmp = userToCalendarRepository.findByUser(user, pageable).content.filter { it.access_type == "ADMINISTRATOR" }
                 return tmp.map {it.calendar.toCalendar()}
-            }
-            else -> {
-                throw BadRequestException("Bad request: unexpected type")
             }
         }
         logger.info("Процедура получения календарей пользователем с тг {} прошла успешно", user.tg)

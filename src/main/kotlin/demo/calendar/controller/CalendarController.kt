@@ -22,5 +22,5 @@ class CalendarController(
     fun deleteCalendar(@RequestParam("token") token : String, @RequestBody request: DeleteCalendarRequest) = calendarService.deleteCalendar(token, request)
 
     @GetMapping("/getCalendars")
-    fun getCalendars(@RequestParam("token") token : String, @RequestParam("page") page : Int, @RequestParam("size") size : Int, @RequestParam("sortBy") sortBy : String?, @RequestParam("type") type : String) = calendarService.getCalendars(token, page, size, sortBy, type)
+    fun getCalendars(@RequestParam("token") token : String, @RequestParam("page") page : Int, @RequestParam("size") size : Int, @RequestParam("sortBy") sortBy : String?, @RequestParam("type") type : ManageUsersRequest.AccessType) = calendarService.getCalendars(token, page, size, sortBy, type)
 }

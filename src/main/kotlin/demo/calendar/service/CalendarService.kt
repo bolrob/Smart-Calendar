@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 class CalendarService(
     private val userToCalendarRepository: UserToCalendarRepository,
     private val calendarRepository: CalendarRepository,
-    private val eventRepository: EventRepository,
+    private val tokenService: TokenService,
     private val userRepository: UserRepository,
     private val tokenRepository: TokenRepository,
     private val userService: UserService
@@ -25,7 +25,7 @@ class CalendarService(
     @Transactional
     fun createCalendar(token: String, request:CreateCalendarRequest): CalendarResponse {
         val tEntity = tokenRepository.findByToken(token)
-        userService.tokenIsValid(tEntity)
+        tokenService.tokenIsValid(tEntity)
         val user = tEntity!!.user
         logger.debug("Начало создания календаря пользователем с тг {}", user.tg)
         if(calendarRepository.findByTeg(request.teg) != null){
@@ -52,7 +52,7 @@ class CalendarService(
     @Transactional
     fun manageCalendar(token: String, request: ManageCalendarRequest): CalendarResponse {
         val tEntity = tokenRepository.findByToken(token)
-        userService.tokenIsValid(tEntity)
+        tokenService.tokenIsValid(tEntity)
         val user = tEntity!!.user
         logger.debug("Начало обновления календаря с тегом {} пользователем с тг: {}", request.teg, user.tg)
         val calendar = calendarRepository.findByTeg(request.teg)
@@ -91,7 +91,7 @@ class CalendarService(
     @Transactional
     fun manageUsers(token: String, request: ManageUsersRequest){
         val tEntity = tokenRepository.findByToken(token)
-        userService.tokenIsValid(tEntity)
+        tokenService.tokenIsValid(tEntity)
         val user = tEntity!!.user
         logger.debug("Начало обновления прав доступа для пользователя с тг {} к календарю с тегом {}. Действие осуществляется пользователем с тг {}}", request.userTg, request.teg, user.tg)
         val calendar = calendarRepository.findByTeg(request.teg)
@@ -144,7 +144,7 @@ class CalendarService(
     @Transactional
     fun deleteCalendar(token:String, request: DeleteCalendarRequest){
         val tEntity = tokenRepository.findByToken(token)
-        userService.tokenIsValid(tEntity)
+        tokenService.tokenIsValid(tEntity)
         val user = tEntity!!.user
         logger.debug("Начало удаления календаря с тегом {} пользователем с тг {}", request.teg, user.tg)
         val calendar = calendarRepository.findByTeg(request.teg)
@@ -180,7 +180,7 @@ class CalendarService(
 
     fun getCalendars(token: String, page: Int, size: Int, sortBy: String?, type: ManageUsersRequest.AccessType): List<CalendarResponse> {
         val tEntity = tokenRepository.findByToken(token)
-        userService.tokenIsValid(tEntity)
+        tokenService.tokenIsValid(tEntity)
         val user = tEntity!!.user
         logger.debug("Начало получения доступных календарей {} пользователю с тг {}", user.tg)
         val sort = Sort.by(sortBy ?: "id")

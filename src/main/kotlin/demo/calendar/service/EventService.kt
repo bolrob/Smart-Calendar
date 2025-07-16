@@ -17,11 +17,12 @@ class EventService(
     private val eventRepository: EventRepository,
     private val tokenRepository: TokenRepository,
     private val userService: UserService,
-    private val reactionRepository: ReactionRepository
+    private val reactionRepository: ReactionRepository,
+    private val tokenService: TokenService
 ) {
     fun validRequest(token: String, teg: String): ValidRequestResponse {
         val tEntity = tokenRepository.findByToken(token)
-        userService.tokenIsValid(tEntity)
+        tokenService.tokenIsValid(tEntity)
         val user = tEntity!!.user
         val calendar = calendarRepository.findByTeg(teg)
             ?: throw InvalidTegException("Calendar with such teg does not exist")
@@ -87,7 +88,7 @@ class EventService(
     @Transactional
     fun react(token: String, request: ReactRequest): Double {
         val tEntity = tokenRepository.findByToken(token)
-        userService.tokenIsValid(tEntity)
+        tokenService.tokenIsValid(tEntity)
         val user = tEntity!!.user
         val calendar = calendarRepository.findByTeg(request.teg)
             ?: throw InvalidTegException("Calendar with such teg does not exist")
